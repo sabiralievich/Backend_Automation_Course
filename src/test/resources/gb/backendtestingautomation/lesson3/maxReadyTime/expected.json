@@ -1,0 +1,25 @@
+{
+  "results": [
+    {
+      "id": 1095931,
+      "title": "Matcha Smoothie",
+      "image": "https://spoonacular.com/recipeImages/1095931-312x231.jpg",
+      "imageType": "jpg"
+    },
+    {
+      "id": 636971,
+      "title": "Caramel Almond Mug Cake",
+      "image": "https://spoonacular.com/recipeImages/636971-312x231.jpg",
+      "imageType": "jpg"
+    },
+    {
+      "id": 657596,
+      "title": "Quick Fix Microwave Brownie",
+      "image": "https://spoonacular.com/recipeImages/657596-312x231.jpg",
+      "imageType": "jpg"
+    }
+  ],
+  "offset": 0,
+  "number": 3,
+  "totalResults": 3
+}

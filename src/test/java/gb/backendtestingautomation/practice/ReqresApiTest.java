@@ -1,6 +1,8 @@
 package gb.backendtestingautomation.practice;
 
+import gb.backendtestingautomation.practice.dto.response.ResourceListData;
 import gb.backendtestingautomation.practice.dto.response.UserData;
+import gb.backendtestingautomation.practice.dto.response.UserListData;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.specification.ResponseSpecification;
 import org.hamcrest.Matchers;
@@ -14,7 +16,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class ReqresApiTest {
+    class ReqresApiTest {
     ResponseSpecification responseSpecification = null;
     final String BASE_URL = "https://reqres.in/";
 
@@ -67,4 +69,42 @@ public class ReqresApiTest {
 
     }
 
+    @Test
+    void getListOfUsersTest() {
+        String request = "api/users?page=";
+        int page = 2;
+        UserListData response =
+        given()
+                .when()
+                .get(BASE_URL + request + page)
+                .then()
+                .extract()
+                .body()
+                .as(UserListData.class);
+
+        assertThat(response.getData()[0].getId(), equalTo(7));
+        assertThat(response.getData()[0].getFirstName(), equalTo("Michael"));
+        assertThat(response.getData()[0].getLastName(), equalTo("Lawson"));
+        assertThat(response.getData().length, equalTo(response.getPerPage()));
+        assertThat(response.getPage(), equalTo(page));
+        assertThat(response.getSupport().getText(), equalTo("To keep ReqRes free, contributions towards server costs are appreciated!"));
+    }
+
+    @Test
+    void getListOfResourcesTest() {
+        String request = "api/unknown";
+        ResourceListData response =
+                given()
+                        .when()
+                        .get(BASE_URL + request)
+                        .then()
+                        .extract()
+                        .body()
+                        .as(ResourceListData.class);
+
+        assertThat(response.getData().length, equalTo(response.getPerPage()));
+        assertThat(response.getData()[0].getPantoneValue(), equalTo("15-4020"));
+        assertThat(response.getSupport().getText(), equalTo("To keep ReqRes free, contributions towards server costs are appreciated!"));
+        assertThat(response.getPerPage(), equalTo(6));
+    }
 }

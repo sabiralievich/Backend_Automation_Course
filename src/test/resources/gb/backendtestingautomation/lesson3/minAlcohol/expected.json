@@ -1,0 +1,22 @@
+{
+  "results": [
+    {
+      "id": 633521,
+      "title": "Baked Chicken In Avocado Boat - Featured In Group",
+      "image": "https://spoonacular.com/recipeImages/633521-312x231.jpg",
+      "imageType": "jpg",
+      "nutrition": {
+        "nutrients": [
+          {
+            "name": "Alcohol",
+            "amount": 42.48,
+            "unit": "g"
+          }
+        ]
+      }
+    }
+  ],
+  "offset": 0,
+  "number": 3,
+  "totalResults": 1
+}
