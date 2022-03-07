@@ -12,7 +12,7 @@ public class ConfigUtils {
 
     static {
         try {
-            configFile = new FileInputStream("src/main/resources/gb/backendtestingautomation/lesson5/properties");
+            configFile = new FileInputStream("src/main/resources/properties");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -26,4 +26,6 @@ public class ConfigUtils {
         }
         return prop.getProperty("url");
     }
+
+    private ConfigUtils(){}
 }

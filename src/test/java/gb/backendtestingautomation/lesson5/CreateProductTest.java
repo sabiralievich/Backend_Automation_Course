@@ -3,15 +3,18 @@ package gb.backendtestingautomation.lesson5;
 import gb.backendtestingautomation.lesson5.dto.Product;
 import gb.backendtestingautomation.lesson5.service.ProductService;
 import gb.backendtestingautomation.lesson5.util.RetrofitUtils;
+import gb.backendtestingautomation.lesson6.db.model.Products;
 import okhttp3.ResponseBody;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.*;
 import retrofit2.Response;
 import java.io.IOException;
+import java.util.List;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class CreateProductTest {
+    class CreateProductTest extends AbstractTest{
     static ProductService productService;
     static Product product;
 
@@ -39,9 +42,20 @@ public class CreateProductTest {
     @Test
     void createProductInFoodCategoryTest() throws IOException {
         Response<Product> response = productService.createProduct(product).execute();
+        assert response.body() != null;
         id = response.body().getId();
         System.out.println("created product with id " + id);
+        //Assert by retrofit:
         assertThat(response.isSuccessful(), CoreMatchers.is(true));
+
+        // assert with sql query:
+        example.createCriteria().andIdEqualTo((long)id);
+        List<Products> product = productsMapper.selectByExample(example);
+        assertThat(product.size(), equalTo(1));
+        assertThat(product.get(0).getTitle(), equalTo("Bread"));
+        assertThat(product.get(0).getPrice(), equalTo(100));
+
+
     }
 
     @Test
@@ -49,11 +63,14 @@ public class CreateProductTest {
         System.out.println("product with id " + id + " exists");
         Response<Product> response = productService.getProductById(id).execute();
         assertThat(response.isSuccessful(), CoreMatchers.is(true));
+        assert response.body() != null;
         assertThat(response.body().getId(), equalTo(id));
         assertThat(response.body().getTitle(), equalTo("Bread"));
         assertThat(response.body().getPrice(), equalTo(100));
         assertThat(response.body().getCategoryTitle(), equalTo("Food"));
         modifyProductById();
+
+
 
 
     }
@@ -77,6 +94,7 @@ public class CreateProductTest {
         System.out.println("product with id " + id + " exists");
         Response<Product> response = productService.getProductById(id).execute();
         assertThat(response.isSuccessful(), CoreMatchers.is(true));
+        assert response.body() != null;
         assertThat(response.body().getId(), equalTo(id));
         assertThat(response.body().getTitle(), equalTo("White Bread"));
         assertThat(response.body().getPrice(), equalTo(200));
