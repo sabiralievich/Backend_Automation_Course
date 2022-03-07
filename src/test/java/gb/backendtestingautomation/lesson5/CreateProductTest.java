@@ -29,15 +29,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
                 .withCategoryTitle("Food");
     }
 
-/*
-    @BeforeEach
-    void setup() {
-        product = new Product()
-                .withTitle("Bread")
-                .withPrice(100)
-                .withCategoryTitle("Food");
-    }
-*/
 
     @Test
     void createProductInFoodCategoryTest() throws IOException {
