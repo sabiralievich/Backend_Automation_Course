@@ -1,22 +1,20 @@
 package gb.backendtestingautomation.practice;
 
-import gb.backendtestingautomation.practice.dto.response.ResourceListData;
-import gb.backendtestingautomation.practice.dto.response.UserData;
-import gb.backendtestingautomation.practice.dto.response.UserListData;
+import gb.backendtestingautomation.practice.dto.response.*;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.specification.ResponseSpecification;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.io.InputStream;
-import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
+
+import static io.restassured.RestAssured.*;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-    class ReqresApiTest {
+class ReqresApiTest {
     ResponseSpecification responseSpecification = null;
     final String BASE_URL = "https://reqres.in/";
 
@@ -74,13 +72,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
         String request = "api/users?page=";
         int page = 2;
         UserListData response =
-        given()
-                .when()
-                .get(BASE_URL + request + page)
-                .then()
-                .extract()
-                .body()
-                .as(UserListData.class);
+                given()
+                        .when()
+                        .get(BASE_URL + request + page)
+                        .then()
+                        .extract()
+                        .body()
+                        .as(UserListData.class);
 
         assertThat(response.getData()[0].getId(), equalTo(7));
         assertThat(response.getData()[0].getFirstName(), equalTo("Michael"));
@@ -106,5 +104,52 @@ import static org.hamcrest.MatcherAssert.assertThat;
         assertThat(response.getData()[0].getPantoneValue(), equalTo("15-4020"));
         assertThat(response.getSupport().getText(), equalTo("To keep ReqRes free, contributions towards server costs are appreciated!"));
         assertThat(response.getPerPage(), equalTo(6));
+    }
+
+    @Test
+    void createUser() {
+        String request = "api/users";
+        String name = "Morpheus";
+        String job = "Leader";
+        UserDataCreationRequest request1 = new UserDataCreationRequest(name, job);
+        System.out.println(request1.getName() + " " + request1.getJob());
+        String body = "{\"name\": \"Morpheus\", \"job\": \"Leader\"}";
+
+        String response =
+                given()
+                        .with()
+                        .body(body)
+                        .when()
+                        .request("POST", BASE_URL + request)
+                        .then()
+                        .statusCode(201)
+                        .extract().body().asPrettyString();
+
+        System.out.println(response);
+/*
+        assertThat(response.getName(), equalTo(name));
+        assertThat(response.getJob(), equalTo(job));
+        assertThat(response.getId(), notNullValue());
+        assertThat(response.getCreatedAt(), notNullValue());
+*/
+
+    }
+
+    @Test
+    void updateUser() {
+        String request = "api/users/2";
+        String name = "Morpheus";
+        String job = "zion rezident";
+        String response =
+                given()
+                        .with()
+                        .body(new UserDataCreationRequest(name, job))
+                        .when()
+                        .request("PUT", BASE_URL + request)
+                        .then()
+                        .statusCode(200)
+                        .extract().body().asPrettyString();
+
+        System.out.println(response);
     }
 }
